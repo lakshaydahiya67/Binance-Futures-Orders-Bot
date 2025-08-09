@@ -5,7 +5,7 @@ import os
 import time
 from dotenv import load_dotenv
 from binance.um_futures import UMFutures
-from binance.exceptions import BinanceAPIException
+from binance.error import ClientError, ServerError
 from logger import (setup_logger, log_api_request, log_api_response, 
                    log_validation_error, log_execution_success, 
                    log_execution_error, log_connection_success, log_twap_execution)
@@ -176,9 +176,13 @@ def place_twap_order(symbol, side, total_quantity, time_duration, chunk_size):
         
         return True
         
-    except BinanceAPIException as e:
-        log_execution_error(logger, "BinanceAPIException", e.message, e.code)
-        print(f"Error: {e.message}")
+    except ClientError as e:
+        log_execution_error(logger, "ClientError", e.error_message, e.error_code)
+        print(f"Error: {e.error_message}")
+        return False
+    except ServerError as e:
+        log_execution_error(logger, "ServerError", e.error_message)
+        print(f"Error: {e.error_message}")
         return False
     except Exception as e:
         log_execution_error(logger, "UnexpectedException", str(e))

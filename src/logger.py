@@ -4,14 +4,21 @@ import logging
 import json
 from datetime import datetime, timezone
 import traceback
+import os
+from zoneinfo import ZoneInfo
 
 
 class JSONFormatter(logging.Formatter):
     """JSON formatter for structured logging"""
     
     def format(self, record):
+        tz_name = os.getenv("BOT_LOG_TZ", "Asia/Kolkata")
+        try:
+            tz = ZoneInfo(tz_name)
+        except Exception:
+            tz = timezone.utc
         log_entry = {
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.now(tz).isoformat(),
             "level": record.levelname,
             "message": record.getMessage()
         }

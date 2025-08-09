@@ -36,13 +36,13 @@ pip install -r requirements.txt
 
 ## Configuration
 
-Set your Binance testnet API credentials as environment variables:
-```bash
-export BINANCE_API_KEY="your_api_key_here"
-export BINANCE_API_SECRET="your_api_secret_here"
+Create a `.env` file in the project root with your Binance testnet API credentials:
+```
+BINANCE_API_KEY=your_api_key_here
+BINANCE_API_SECRET=your_api_secret_here
 ```
 
-The bot reads credentials only from environment variables.
+Alternatively, you can export them as environment variables. The bot reads credentials from `.env` via `python-dotenv`.
 
 ## Usage
 
@@ -114,7 +114,13 @@ The bot performs basic input validation before placing orders:
 
 ## Logging
 
-All operations are logged to `bot.log` with structured JSON format:
+All operations are logged to `bot.log` with structured JSON format. Timestamps default to Asia/Kolkata. You can override with:
+
+```bash
+export BOT_LOG_TZ="UTC"   # or any IANA timezone, e.g., Asia/Singapore
+```
+
+Example JSON line:
 
 ```json
 {
