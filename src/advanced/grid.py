@@ -80,6 +80,13 @@ def place_grid_orders(symbol, price_low, price_high, grid_levels, quantity_per_l
         # Get current market price
         ticker = client.ticker_price(symbol=symbol)
         current_price = float(ticker['price'])
+
+        # Calculate grid parameters (before logging derived values)
+        price_low_val = float(price_low)
+        price_high_val = float(price_high)
+        levels = int(grid_levels)
+        qty_per_level = float(quantity_per_level)
+
         logger.info("Grid strategy market data retrieved", extra={
             'data': {
                 'symbol': symbol,
@@ -88,12 +95,6 @@ def place_grid_orders(symbol, price_low, price_high, grid_levels, quantity_per_l
                 'grid_range_high': price_high_val
             }
         })
-        
-        # Calculate grid parameters
-        price_low_val = float(price_low)
-        price_high_val = float(price_high)
-        levels = int(grid_levels)
-        qty_per_level = float(quantity_per_level)
         
         price_step = (price_high_val - price_low_val) / (levels - 1)
         

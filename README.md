@@ -42,7 +42,7 @@ export BINANCE_API_KEY="your_api_key_here"
 export BINANCE_API_SECRET="your_api_secret_here"
 ```
 
-Or the bot will prompt for credentials when needed.
+The bot reads credentials only from environment variables.
 
 ## Usage
 
@@ -105,12 +105,12 @@ python src/advanced/grid.py BTCUSDT 44000.00 46000.00 5 0.01
 
 ## Input Validation
 
-The bot validates all inputs before placing orders:
+The bot performs basic input validation before placing orders:
 
-- **Symbol Validation**: Checks if symbol exists and is active for trading
-- **Quantity Validation**: Ensures minimum order size and correct precision
-- **Price Validation**: Verifies price format and reasonable ranges
 - **Side Validation**: Ensures BUY/SELL parameters are correct
+- **Quantity Validation**: Ensures quantities are positive numbers
+- **Price Validation**: Ensures prices are positive numbers (where applicable)
+- **Stop/Limit Relationship**: For stop-limit orders, validates the expected relation between stop and limit prices
 
 ## Logging
 
@@ -145,14 +145,13 @@ The bot handles various error scenarios:
 
 1. **Testnet Only**: This bot is configured for Binance testnet environment
 2. **No Real Money**: All trades are executed with testnet funds
-3. **Manual Management**: Advanced orders may require manual monitoring
+3. **OCO in Futures**: Binance USDT-M Futures does not support native OCO; this project implements OCO-style behavior by placing a limit and a stop order separately. Manual management is required to cancel the remaining order when one executes.
 4. **Rate Limits**: Be aware of API rate limits to avoid restrictions
 
 ## Dependencies
 
 - `binance-futures-connector>=3.6.0`: Official Binance futures connector
-- `requests>=2.25.1`: HTTP requests library
-- `python-binance>=1.0.19`: Community Binance library
+- `python-dotenv>=1.0.0`: Environment variable loader
 
 ## Testing
 
