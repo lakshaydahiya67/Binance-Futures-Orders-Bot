@@ -34,6 +34,11 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
+4. Set Python module path (run once per terminal session):
+```bash
+export PYTHONPATH=src
+```
+
 ## Configuration
 
 Create a `.env` file in the project root with your Binance testnet API credentials:
@@ -48,7 +53,13 @@ Alternatively, you can export them as environment variables. The bot reads crede
 
 ### Basic CLI Commands
 
-All order types can be executed directly using their respective Python files.
+Before running commands, ensure your virtual environment is active and `PYTHONPATH` is set:
+```bash
+source venv/bin/activate
+export PYTHONPATH=src
+```
+
+All order types can be executed directly using their respective Python files from the project root.
 
 ### Market Orders
 ```bash
@@ -86,12 +97,19 @@ python src/advanced/grid.py BTCUSDT 44000.00 46000.00 5 0.01
 # Parameters: SYMBOL PRICE_LOW PRICE_HIGH GRID_LEVELS QUANTITY_PER_LEVEL
 ```
 
+Note: If you prefer to run from inside `src/`, use module syntax to resolve imports:
+```bash
+cd src
+python -m advanced.stop_limit BTCUSDT BUY 0.01 44000.00 45000.00
+```
+
 ## File Structure
 
 ```
 ├── src/                    # All source code
 │   ├── market_orders.py    # Market order logic
 │   ├── limit_orders.py     # Limit order logic
+|   ├── logger.py          # JSON Logging setup
 │   ├── advanced/           # Advanced order types
 │   │   ├── stop_limit.py   # Stop-limit order logic
 │   │   ├── oco.py          # OCO order logic
